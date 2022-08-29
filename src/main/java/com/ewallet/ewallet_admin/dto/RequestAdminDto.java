@@ -1,7 +1,8 @@
-package com.ewallet.ewallet_admin.dto.request;
+package com.ewallet.ewallet_admin.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 
 @Getter
@@ -17,4 +18,5 @@ public class RequestAdminDto
     private String email;
     private String password;
     private String gender;
+    private CommonsMultipartFile profileImage;
 }

@@ -1,16 +1,15 @@
-package com.ewallet.ewallet_admin.service.implementation;
+package com.ewallet.ewallet_admin.service;
 
-import com.ewallet.ewallet_admin.dto.request.RequestAdminDto;
-import com.ewallet.ewallet_admin.dto.response.ResponseAdminDto;
+import com.common_service.attachment.config.Properties;
+import com.common_service.attachment.service.definition.IAttachmentService;
+import com.common_service.enums.Gender;
+import com.common_service.enums.Role;
+import com.common_service.enums.Status;
+import com.common_service.exceptions.NotFoundException;
+import com.ewallet.ewallet_admin.dto.RequestAdminDto;
+import com.ewallet.ewallet_admin.dto.ResponseAdminDto;
 import com.ewallet.ewallet_admin.entity.Admin;
-import com.ewallet.ewallet_admin.enums.Gender;
-import com.ewallet.ewallet_admin.enums.Role;
-import com.ewallet.ewallet_admin.enums.Status;
-import com.ewallet.ewallet_admin.exceptions.NotFoundException;
 import com.ewallet.ewallet_admin.repository.AdminRepository;
-import com.ewallet.ewallet_admin.service.definition.AdminService;
-import com.ewallet.ewallet_admin.service.definition.AttachmentService;
-import com.ewallet.ewallet_admin.service.definition.NidCardService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +21,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AdminServiceImpl implements AdminService
+public class AdminServiceImpl implements IAdminService
 {
     private final AdminRepository adminRepository;
-    private final NidCardService nidCardService;
-    private final AttachmentService attachmentService;
+    private final IAttachmentService iAttachmentService;
 
-    public AdminServiceImpl(AdminRepository adminRepository, NidCardService nidCardService, AttachmentService attachmentService) {
+    public AdminServiceImpl(AdminRepository adminRepository,  IAttachmentService iAttachmentService) {
         this.adminRepository = adminRepository;
-        this.nidCardService = nidCardService;
-        this.attachmentService = attachmentService;
+        this.iAttachmentService = iAttachmentService;
     }
 
     @Override
@@ -46,15 +43,15 @@ public class AdminServiceImpl implements AdminService
     public List<ResponseAdminDto> getAllAdmin()
     {
         List<Admin> adminList = adminRepository.findAll();
-        var resAdminList = new ArrayList<ResponseAdminDto>();
-        var resAdmin = new ResponseAdminDto();
+        var responseAdminDtos = new ArrayList<ResponseAdminDto>();
+        var responseAdminDto = new ResponseAdminDto();
 
         for (Admin admin: adminList)
         {
-            resAdmin = entityToDto(admin);
-            resAdminList.add(resAdmin);
+            responseAdminDto = entityToDto(admin);
+            responseAdminDtos.add(responseAdminDto);
         }
-        return resAdminList;
+        return responseAdminDtos;
     }
 
     @Override
@@ -86,15 +83,15 @@ public class AdminServiceImpl implements AdminService
     @Override
     public Admin dtoToEntity(RequestAdminDto requestAdminDto) throws IOException {
 //        var nidCard = nidCardService.getNidCard(UUID.fromString(requestAdminDto.getNidNumber()));
-//        var profileImage = attachmentService.uploadAttachment(file, Properties.Attachment_FOLDER);
-//        var nidCardImage = attachmentService.uploadAttachment(file2, Properties.NID_CARD_FOLDER);
+        var profileImage = iAttachmentService.uploadAttachment(requestAdminDto.getProfileImage(), Properties.Attachment_FOLDER).toString();
+
 
         var admin = new Admin();
         BeanUtils.copyProperties(requestAdminDto,admin);
         var birthDate = LocalDate.parse(requestAdminDto.getBirthDate());
         admin.setBirthDate(birthDate);
 //        admin.setNidNumber(nidCard);
-//        admin.setProfileImage(profileImage);
+        admin.setProfileImageUrl(profileImage);
         admin.setStatus(Status.ACTIVE);
         admin.setRole(Role.ROLE_ADMIN);
         admin.setGender(Gender.valueOf(requestAdminDto.getGender()));
@@ -104,18 +101,16 @@ public class AdminServiceImpl implements AdminService
     @Override
     public ResponseAdminDto entityToDto(Admin admin)
     {
-
-
-        var resAdminDto = new ResponseAdminDto();
-        BeanUtils.copyProperties(admin,resAdminDto);
-        resAdminDto.setId(admin.getId().toString());
-        resAdminDto.setBirthDate(admin.getBirthDate().toString());
-        resAdminDto.setRole(Role.ROLE_ADMIN.toString());
-        resAdminDto.setCreatedAt(admin.getCreatedAt().toString());
-//        resAdminDto.setNidNumber(admin.getNidNumber().getNidNumber());
-//        resAdminDto.setProfileImagePath(admin.getProfileImage().getAttachmentPath());
-        resAdminDto.setStatus(admin.getStatus().toString());
-        resAdminDto.setGender(admin.getGender().toString());
-        return resAdminDto;
+        var responseAdminDtoAdminDto = new ResponseAdminDto();
+        BeanUtils.copyProperties(admin, responseAdminDtoAdminDto);
+        responseAdminDtoAdminDto.setId(admin.getId().toString());
+        responseAdminDtoAdminDto.setBirthDate(admin.getBirthDate().toString());
+        responseAdminDtoAdminDto.setRole(Role.ROLE_ADMIN.toString());
+        responseAdminDtoAdminDto.setCreatedAt(admin.getCreatedAt().toString());
+//        responseAdminDtoAdminDto.setNidNumber(admin.getNidNumber().getNidNumber());
+        responseAdminDtoAdminDto.setProfileImageUrl(admin.getProfileImageUrl());
+        responseAdminDtoAdminDto.setStatus(admin.getStatus().toString());
+        responseAdminDtoAdminDto.setGender(admin.getGender().toString());
+        return responseAdminDtoAdminDto;
     }
 }

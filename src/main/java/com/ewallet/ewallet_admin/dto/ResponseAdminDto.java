@@ -1,4 +1,4 @@
-package com.ewallet.ewallet_admin.dto.response;
+package com.ewallet.ewallet_admin.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +20,6 @@ public class ResponseAdminDto
     private String password;
     private String gender;
     private String createdAt;
-    private String profileImagePath;
+    private String profileImageUrl;
     private String status;
 }
