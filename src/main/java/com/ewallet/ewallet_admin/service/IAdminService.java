@@ -1,13 +1,13 @@
-package com.ewallet.ewallet_admin.service.definition;
+package com.ewallet.ewallet_admin.service;
 
-import com.ewallet.ewallet_admin.dto.request.RequestAdminDto;
-import com.ewallet.ewallet_admin.dto.response.ResponseAdminDto;
+import com.ewallet.ewallet_admin.dto.RequestAdminDto;
+import com.ewallet.ewallet_admin.dto.ResponseAdminDto;
 import com.ewallet.ewallet_admin.entity.Admin;
 
 import java.io.IOException;
 import java.util.List;
 
-public interface AdminService
+public interface IAdminService
 {
     ResponseAdminDto getAdmin(String id) throws Exception;
 

@@ -1,7 +1,7 @@
-package com.ewallet.ewallet_admin.controller.definition;
+package com.ewallet.ewallet_admin.controller;
 
-import com.ewallet.ewallet_admin.dto.request.RequestAdminDto;
-import com.ewallet.ewallet_admin.dto.response.ResponseAdminDto;
+import com.ewallet.ewallet_admin.dto.RequestAdminDto;
+import com.ewallet.ewallet_admin.dto.ResponseAdminDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @Validated
 @CrossOrigin("${http://localhost:4200}")
 @RequestMapping("/api/v1/admin")
-public interface AdminController
+public interface IAdminController
 {
     @PostMapping("/")
     ResponseEntity<String> createAdmin(@Valid @RequestBody RequestAdminDto requestAdminDto) throws IOException;
