@@ -1,8 +1,9 @@
 package com.ewallet.ewallet_admin.entity;
 
-import com.ewallet.ewallet_admin.enums.Gender;
-import com.ewallet.ewallet_admin.enums.Role;
-import com.ewallet.ewallet_admin.enums.Status;
+import com.common_service.enums.Gender;
+import com.common_service.enums.Role;
+import com.common_service.enums.Status;
+
 import lombok.Data;
 
 import javax.persistence.*;
@@ -36,9 +37,8 @@ public class Admin implements Serializable {
     @Column(name = "address", columnDefinition = "TEXT")
     private String address;
 
-    @OneToOne(fetch = FetchType.LAZY,orphanRemoval = true)
-    @JoinColumn(name = "nid_number",referencedColumnName = "id")
-    private NidCard nidNumber;
+    @Column(name = "nid_number")
+    private String nidNumber;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -53,9 +53,8 @@ public class Admin implements Serializable {
     @Column(name = "gender")
     private Gender gender;
 
-    @JoinColumn(name = "profile_image", referencedColumnName = "id")
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
-    private Attachment profileImage;
+    @Column(name = "image_url")
+    private String profileImageUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "account_status")
