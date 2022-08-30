@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class AdminControllerImpl implements IAdminController {
 
 
     @Override
-    public ResponseEntity<String> createAdmin(@Valid RequestAdminDto requestAdminDto) throws IOException {
+    public ResponseEntity<String> createAdmin(RequestAdminDto requestAdminDto) throws IOException {
         iAdminService.createAdmin(requestAdminDto);
         return new  ResponseEntity<>("Successfully created admin", HttpStatus.CREATED);
     }
@@ -37,7 +36,7 @@ public class AdminControllerImpl implements IAdminController {
 
 
     @Override
-    public ResponseEntity<String > deleteAdmin(String id) throws Exception
+    public ResponseEntity<String > deleteAdmin( String id) throws Exception
     {
         iAdminService.deleteAdmin(id);
         return ResponseEntity.ok("Admin account deleted");
