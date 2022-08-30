@@ -7,7 +7,7 @@ import com.ewallet.ewallet_admin.entity.Admin;
 import java.io.IOException;
 import java.util.List;
 
-public interface IAdminService
+public interface AdminService
 {
     ResponseAdminDto getAdmin(String id) throws Exception;
 

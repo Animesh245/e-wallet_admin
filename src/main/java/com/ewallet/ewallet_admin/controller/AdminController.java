@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin("${http://localhost:4200}")
 @RequestMapping("/api/v1/admin")
-public interface IAdminController
+public interface AdminController
 {
     @PostMapping("/")
     ResponseEntity<String> createAdmin(@ModelAttribute RequestAdminDto requestAdminDto) throws IOException;

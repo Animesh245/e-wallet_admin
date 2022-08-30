@@ -1,6 +1,6 @@
 package com.ewallet.ewallet_admin;
 
-import com.common_service.attachment.service.definition.IAttachmentService;
+import com.common_service.attachment.service.definition.AttachmentService;
 import com.common_service.attachment.service.implementation.AttachmentServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,9 +14,8 @@ public class EwalletAdminApplication {
     }
 
     @Bean
-    public IAttachmentService attachmentService()
+    public AttachmentService attachmentService()
     {
         return new AttachmentServiceImpl();
     }
-
 }

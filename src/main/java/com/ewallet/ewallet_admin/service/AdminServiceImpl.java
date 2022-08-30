@@ -1,7 +1,7 @@
 package com.ewallet.ewallet_admin.service;
 
 import com.common_service.attachment.config.Properties;
-import com.common_service.attachment.service.definition.IAttachmentService;
+import com.common_service.attachment.service.definition.AttachmentService;
 import com.common_service.enums.Gender;
 import com.common_service.enums.Role;
 import com.common_service.enums.Status;
@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AdminServiceImpl implements IAdminService
+public class AdminServiceImpl implements AdminService
 {
     private final AdminRepository adminRepository;
-    private final IAttachmentService iAttachmentService;
+    private final AttachmentService attachmentService;
 
-    public AdminServiceImpl(AdminRepository adminRepository,  IAttachmentService iAttachmentService) {
+    public AdminServiceImpl(AdminRepository adminRepository,  AttachmentService attachmentService) {
         this.adminRepository = adminRepository;
-        this.iAttachmentService = iAttachmentService;
+        this.attachmentService = attachmentService;
     }
 
     @Override
@@ -81,17 +81,17 @@ public class AdminServiceImpl implements IAdminService
     }
 
     @Override
-    public Admin dtoToEntity(RequestAdminDto requestAdminDto) throws IOException {
-//        var nidCard = nidCardService.getNidCard(UUID.fromString(requestAdminDto.getNidNumber()));
-        var profileImage = iAttachmentService.uploadAttachment(requestAdminDto.getProfileImage(), Properties.Attachment_FOLDER).toString();
-
+    public Admin dtoToEntity(RequestAdminDto requestAdminDto) throws IOException
+    {
+        var profileImageUrl = attachmentService.uploadAttachment(requestAdminDto.getProfileImage(), Properties.Attachment_FOLDER);
+        var nidPhotoUrl = attachmentService.uploadNidCard(requestAdminDto.getNidCardPhoto(), Properties.NID_CARD_FOLDER);
 
         var admin = new Admin();
         BeanUtils.copyProperties(requestAdminDto,admin);
         var birthDate = LocalDate.parse(requestAdminDto.getBirthDate());
         admin.setBirthDate(birthDate);
-//        admin.setNidNumber(nidCard);
-        admin.setProfileImageUrl(profileImage);
+        admin.setProfileImageUrl(profileImageUrl);
+        admin.setNidCardPhotoUrl(nidPhotoUrl);
         admin.setStatus(Status.ACTIVE);
         admin.setRole(Role.ROLE_ADMIN);
         admin.setGender(Gender.valueOf(requestAdminDto.getGender()));
@@ -101,16 +101,16 @@ public class AdminServiceImpl implements IAdminService
     @Override
     public ResponseAdminDto entityToDto(Admin admin)
     {
-        var responseAdminDtoAdminDto = new ResponseAdminDto();
-        BeanUtils.copyProperties(admin, responseAdminDtoAdminDto);
-        responseAdminDtoAdminDto.setId(admin.getId().toString());
-        responseAdminDtoAdminDto.setBirthDate(admin.getBirthDate().toString());
-        responseAdminDtoAdminDto.setRole(Role.ROLE_ADMIN.toString());
-        responseAdminDtoAdminDto.setCreatedAt(admin.getCreatedAt().toString());
-//        responseAdminDtoAdminDto.setNidNumber(admin.getNidNumber().getNidNumber());
-        responseAdminDtoAdminDto.setProfileImageUrl(admin.getProfileImageUrl());
-        responseAdminDtoAdminDto.setStatus(admin.getStatus().toString());
-        responseAdminDtoAdminDto.setGender(admin.getGender().toString());
-        return responseAdminDtoAdminDto;
+        var responseAdminDto = new ResponseAdminDto();
+        BeanUtils.copyProperties(admin, responseAdminDto);
+        responseAdminDto.setId(admin.getId().toString());
+        responseAdminDto.setBirthDate(admin.getBirthDate().toString());
+        responseAdminDto.setRole(Role.ROLE_ADMIN.toString());
+        responseAdminDto.setCreatedAt(admin.getCreatedAt().toString());
+        responseAdminDto.setNidCardPhotoUrl(admin.getNidCardPhotoUrl());
+        responseAdminDto.setProfileImageUrl(admin.getProfileImageUrl());
+        responseAdminDto.setStatus(admin.getStatus().toString());
+        responseAdminDto.setGender(admin.getGender().toString());
+        return responseAdminDto;
     }
 }
