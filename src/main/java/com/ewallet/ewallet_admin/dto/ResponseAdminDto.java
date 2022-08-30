@@ -21,5 +21,6 @@ public class ResponseAdminDto
     private String gender;
     private String createdAt;
     private String profileImageUrl;
+    private String nidCardPhotoUrl;
     private String status;
 }

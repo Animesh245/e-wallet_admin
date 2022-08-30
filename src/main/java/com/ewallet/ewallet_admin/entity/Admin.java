@@ -56,6 +56,9 @@ public class Admin implements Serializable {
     @Column(name = "image_url")
     private String profileImageUrl;
 
+    @Column(name = "nid_card_url")
+    private String nidCardPhotoUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "account_status")
     private Status status;
