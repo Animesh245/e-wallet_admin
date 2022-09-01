@@ -26,7 +26,8 @@ public class AdminServiceImpl implements AdminService
     private final AdminRepository adminRepository;
     private final AttachmentService attachmentService;
 
-    public AdminServiceImpl(AdminRepository adminRepository,  AttachmentService attachmentService) {
+    public AdminServiceImpl(AdminRepository adminRepository,  AttachmentService attachmentService)
+    {
         this.adminRepository = adminRepository;
         this.attachmentService = attachmentService;
     }
@@ -43,7 +44,7 @@ public class AdminServiceImpl implements AdminService
     public List<ResponseAdminDto> getAllAdmin()
     {
         List<Admin> adminList = adminRepository.findAll();
-        var responseAdminDtos = new ArrayList<ResponseAdminDto>();
+        List<ResponseAdminDto> responseAdminDtos = new ArrayList<>();
         var responseAdminDto = new ResponseAdminDto();
 
         for (Admin admin: adminList)
@@ -55,16 +56,21 @@ public class AdminServiceImpl implements AdminService
     }
 
     @Override
-    public void createAdmin(RequestAdminDto requestAdminDto) throws IOException {
-        var admin = dtoToEntity(requestAdminDto);
-        var createdAt = LocalDateTime.now();
-        admin.setCreatedAt(createdAt);
+    public void createAdmin(RequestAdminDto requestAdminDto) throws IOException
+    {
+        if(adminRepository.findAdminByNidNumber(requestAdminDto.getNidNumber()) == null)
+        {
+            var admin = dtoToEntity(requestAdminDto);
+            var createdAt = LocalDateTime.now();
+            admin.setCreatedAt(createdAt);
 
-        adminRepository.save(admin);
+            adminRepository.save(admin);
+        }
     }
 
     @Override
-    public void updateAdmin(String id, RequestAdminDto requestAdminDto) throws IOException {
+    public void updateAdmin(String id, RequestAdminDto requestAdminDto) throws IOException
+    {
         var admin = adminRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException("Not Found"));
 
         var admin2 = dtoToEntity(requestAdminDto);
